@@ -15,25 +15,28 @@ class CafeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // pastikan ini menunjuk ke file layout yang benar
         return inflater.inflate(R.layout.fragment_cafe, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // AMBIL VIEW DARI LAYOUT DENGAN EXPLICIT findViewById
-        // NOTE: gunakan R.id.view_pager dan R.id.tab_layout sesuai dengan id di fragment_cafe.xml
         val viewPager = view.findViewById<ViewPager2>(R.id.view_pager)
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
 
-        // Pasang adapter ke ViewPager2
-        val adapter = CafeAdapter(childFragmentManager, lifecycle)
+        // ambil deskripsi dari strings.xml
+        val contents = listOf(
+            getString(R.string.starbucks_desc),
+            getString(R.string.janjijiwa_desc),
+            getString(R.string.kopikenangan_desc)
+        )
+
+        val adapter = CafeAdapter(childFragmentManager, lifecycle, contents)
         viewPager.adapter = adapter
 
-        // Sambungkan TabLayout dan ViewPager2
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = resources.getString(TABS_FIXED[position])
+            val (titleRes, _) = TABS_FIXED[position]
+            tab.text = resources.getString(titleRes)
         }.attach()
     }
 }

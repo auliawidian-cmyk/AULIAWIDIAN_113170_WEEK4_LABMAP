@@ -7,7 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
+private const val TAB_CONTENT = "TAB_CONTENT"
+
 class CafeDetailFragment : Fragment() {
+    private var content: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            content = it.getString(TAB_CONTENT)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -18,15 +28,15 @@ class CafeDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.findViewById<TextView>(R.id.content_description)?.text = content
+    }
 
-        val index = arguments?.getInt("tab_index") ?: 0
-        val textView = view.findViewById<TextView>(R.id.cafeText)
-
-        textView.text = when (index) {
-            0 -> "Ini halaman Starbucks"
-            1 -> "Ini halaman Janji Jiwa"
-            2 -> "Ini halaman Kopi Kenangan"
-            else -> "Cafe Detail"
-        }
+    companion object {
+        fun newInstance(content: String) =
+            CafeDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putString(TAB_CONTENT, content)
+                }
+            }
     }
 }
